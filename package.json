@@ -1,0 +1,21 @@
+{
+  "name": "json-multibuffer-stream",
+  "version": "0.0.1",
+  "description": "Transform stream that encodes streams of JSON data as multibuffers",
+  "main": "index.js",
+  "author": "max ogden",
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxogden/json-multibuffer-stream.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxogden/json-multibuffer-stream/issues"
+  },
+  "homepage": "https://github.com/maxogden/json-multibuffer-stream",
+  "dependencies": {
+    "through": "~2.3.4",
+    "multibuffer": "~2.0.0",
+    "bops": "~0.1.1"
+  }
+}
