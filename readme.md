@@ -1,6 +1,6 @@
 # json-multibuffer-stream
 
-Transform stream that encodes streams of JSON data as [multibuffers](http://npmjs.org/multibuffer).
+Transform stream that encodes JSON data as [multibuffers](http://npmjs.org/multibuffer).
 
 [![NPM](https://nodei.co/npm/json-multibuffer-stream.png)](https://nodei.co/npm/json-multibuffer-stream/)
 
