@@ -5,7 +5,7 @@ var multibuffer = require('multibuffer')
 
 var empty = bops.from("")
 
-module.exports = function(headers, onRow) {
+module.exports = function(headers, onRow, extra) {
   if (typeof headers === 'function') {
     onRow = headers
     headers = undefined
@@ -13,6 +13,7 @@ module.exports = function(headers, onRow) {
   
   var stream = through(write)  
   stream.headers = headers
+  stream.extra = extra
   
   return stream
   
@@ -22,7 +23,7 @@ module.exports = function(headers, onRow) {
     if (onRow) updated = onRow(obj)
     if (updated) obj = updated
     if (!stream.headers) stream.headers = Object.keys(obj).sort()
-    var buf = encode(obj, stream.headers)
+    var buf = encode(obj, stream.headers, stream.extra)
     this.queue(buf)
   }
 }
@@ -30,7 +31,7 @@ module.exports = function(headers, onRow) {
 module.exports.encode = encode
 module.exports.decode = decode
 
-function encode(obj, headers) {
+function encode(obj, headers, extra) {
   var keys = headers || Object.keys(obj)
   var vals = []
   for (var i = 0; i < keys.length; i++) {
@@ -43,7 +44,7 @@ function encode(obj, headers) {
     if (typeof val === 'object' || val instanceof Array) val = JSON.stringify(val)
     vals.push(bops.from(isFinite(val) ? val + "" : val))
   }
-  return multibuffer.pack(vals)
+  return multibuffer.pack(vals, extra)
 }
 
 function decode(headers, vals) {
