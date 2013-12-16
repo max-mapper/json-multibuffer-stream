@@ -53,6 +53,7 @@ function decode(headers, vals) {
   for (var i = 0; i < headers.length; i++) {
     var header = headers[i]
     var buff = buffs[i]
+    if (!buff) continue
     if (buff[0] === 91 || buff[0] === 123) { // [, {
       try {
         buff = JSON.parse(buff)
