@@ -1,9 +1,8 @@
 var path = require('path')
-var bops = require('bops')
-var through = require('through')
+var through = require('through2')
 var multibuffer = require('multibuffer')
 
-var empty = bops.from("")
+var empty = new Buffer("")
 
 module.exports = function(headers, onRow, extra) {
   if (typeof headers === 'function') {
@@ -11,20 +10,21 @@ module.exports = function(headers, onRow, extra) {
     headers = undefined
   }
   
-  var stream = through(write)  
+  var stream = through({objectMode: true}, write)
   stream.headers = headers
   stream.extra = extra
   
   return stream
   
-  function write(obj) {
+  function write(obj, enc, next) {
     if (obj.length) obj = JSON.parse(obj)
     var updated
     if (onRow) updated = onRow(obj)
     if (updated) obj = updated
     if (!stream.headers) stream.headers = Object.keys(obj).sort()
     var buf = encode(obj, stream.headers, stream.extra)
-    this.queue(buf)
+    this.push(buf)
+    next()
   }
 }
 
@@ -42,7 +42,7 @@ function encode(obj, headers, extra) {
       continue
     }
     if (typeof val === 'object' || val instanceof Array) val = JSON.stringify(val)
-    vals.push(bops.from(isFinite(val) ? val + "" : val))
+    vals.push(new Buffer(isFinite(val) ? val + "" : val))
   }
   return multibuffer.pack(vals, extra)
 }
@@ -59,7 +59,7 @@ function decode(headers, vals) {
         buff = JSON.parse(buff)
       } catch(e) {}
     }
-    buff = bops.is(buff) ? buff.toString() : buff
+    buff = Buffer.isBuffer(buff) ? buff.toString() : buff
     if (buff.length === 0) continue
     obj[header] = buff
   }
