@@ -54,11 +54,6 @@ function decode(headers, vals) {
     var header = headers[i]
     var buff = buffs[i]
     if (!buff) continue
-    if (buff[0] === 91 || buff[0] === 123) { // [, {
-      try {
-        buff = JSON.parse(buff)
-      } catch(e) {}
-    }
     buff = Buffer.isBuffer(buff) ? buff.toString() : buff
     if (buff.length === 0) continue
     obj[header] = buff
