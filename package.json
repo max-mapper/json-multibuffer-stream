@@ -1,6 +1,6 @@
 {
   "name": "json-multibuffer-stream",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Transform stream that encodes JSON data as multibuffers",
   "main": "index.js",
   "author": "max ogden",
@@ -16,5 +16,9 @@
   "dependencies": {
     "multibuffer": "~2.2.0",
     "through2": "~0.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

@@ -58,6 +58,5 @@ function decode(headers, vals) {
     if (buff.length === 0) continue
     obj[header] = buff
   }
-  return obj
+  return { decoded: obj, unpacked: buffs }
 }
-
