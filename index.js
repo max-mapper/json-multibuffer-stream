@@ -19,12 +19,22 @@ module.exports = function(headers, onRow, extra) {
   function write(obj, enc, next) {
     if (obj.length) obj = JSON.parse(obj)
     var updated
-    if (onRow) updated = onRow(obj)
-    if (updated) obj = updated
-    if (!stream.headers) stream.headers = Object.keys(obj).sort()
-    var buf = encode(obj, stream.headers, stream.extra)
-    this.push(buf)
-    next()
+    if (onRow) {
+      onRow(obj, function(err, updated) {
+        if (err) return stream.emit('error', err)
+        send(updated)
+      })
+    } else {
+      send(updated)
+    }
+    
+    function send(updated) {
+      if (updated) obj = updated
+      if (!stream.headers) stream.headers = Object.keys(obj).sort()
+      var buf = encode(obj, stream.headers, stream.extra)
+      stream.push(buf)
+      next()
+    }
   }
 }
 
